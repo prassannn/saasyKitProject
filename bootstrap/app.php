@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Console\Kernel;
 
 return Illuminate\Foundation\Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,3 +25,7 @@ return Illuminate\Foundation\Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {})->create();
+
+    app()->booted(function () {
+        app(Schedule::class)->command('app:send-rental-expiry-reminders')->daily();
+    });
